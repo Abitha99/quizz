@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: myapp-quiz
+ labels:
+  app: myapp-quiz
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: myapp-quiz
+ template:
+  metadata: 
+   labels:
+    app: myapp-quiz
+  spec:
+   containers:
+   - name: myapp-quiz
+     image: ishu1108/docker-jenkins:tagversion
+     ports:
+     - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-quiz
+spec:
+  type: LoadBalancer
+  selector:
+    app: myapp-quiz
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080

@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: myapp-deployment-loadbalancer1
+ labels:
+  app: myapp-app-loadbalancer1
+spec:
+ replicas: 2
+ selector:
+  matchLabels:
+   app: myapp-app-loadbalancer1
+ template:
+  metadata: 
+   labels:
+    app: myapp-app-loadbalancer1
+  spec:
+   containers:
+   - name: myapp-app-loadbalancer1
+     image: ishu1108/docker-jenkins:tagversion
+     ports:
+     - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-service-loadbalancer1
+spec:
+  type: LoadBalancer
+  selector:
+    app: myapp-app-loadbalancer1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
